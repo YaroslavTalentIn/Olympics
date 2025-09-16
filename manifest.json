@@ -1,10 +1,11 @@
+```json
 {
-  "id": "./",
+  "id": "/TalentInOlympics/",
   "name": "Talentin Olympics Final",
   "short_name": "OlympicsTimer",
   "description": "A stopwatch-style challenge timer for TalentIn Olympics.",
-  "start_url": ".",
-  "scope": ".",
+  "start_url": "/TalentInOlympics/",
+  "scope": "/TalentInOlympics/",
   "display": "standalone",
   "display_override": ["standalone", "fullscreen"],
   "orientation": "portrait-primary",
@@ -32,3 +33,4 @@
   ],
   "prefer_related_applications": false
 }
+```
