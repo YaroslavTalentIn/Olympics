@@ -1,0 +1,130 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Talentin Olympics Final</title>
+  <meta name="theme-color" content="#0b0e18" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Talentin Olympics Final" />
+  <link rel="apple-touch-icon" href="icons/icon-180.png" />
+  <style>
+    :root{ --bg:#0b0e18; --text:#e8ecff; --muted:#a6b0d8; --danger:#ff3b3b; --ok:#2bd979; --neon:#f1ff8a; --led: var(--neon); --glow: rgba(241,255,138,.32); --glow-blue: rgba(10,40,130,.46); }
+    *{box-sizing:border-box}
+    html,body{ height:100%; margin:0; color:var(--text); font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial; }
+    body{ position:relative; min-height:100vh; display:grid; place-items:center; padding:24px; background:var(--bg); isolation:isolate; }
+    body::before{ content:""; position:fixed; inset:-20vh -20vw; z-index:-1; pointer-events:none; background-repeat:no-repeat; background:
+        radial-gradient(1100px 780px at 75% -10%, rgba(124,156,255,.22) 0%, rgba(124,156,255,0) 70%),
+        radial-gradient(1200px 760px at 88% 85%, rgba(241,255,138,.40) 0%, rgba(241,255,138,0) 65%),
+        radial-gradient(900px 620px at 12% 88%, rgba(57,224,255,.22) 0%, rgba(57,224,255,0) 62%),
+        radial-gradient(900px 600px at 0% 0%, rgba(42,103,91,.24) 0%, rgba(42,103,91,0) 55%); }
+    .card{display:grid; grid-template-rows:auto 1fr auto; gap:18px; justify-items:center; width:min(1200px,96vw)}
+    h1{margin:0; font-size:clamp(30px,4vw,52px); color:var(--neon); font-family:'DrukCondSuper', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; font-weight:900; text-transform:uppercase; letter-spacing:.02em; text-shadow:0 0 10px rgba(241,255,138,.25), 0 0 28px rgba(241,255,138,.15);} 
+    .titlebar{display:flex; align-items:center; justify-content:center; gap:14px;}
+    .board{display:grid; place-items:center; width:100%; height:min(420px,52vh); border-radius:22px; background: linear-gradient(180deg, #0d111b, #060913 60%, #05070e); border: 1px solid rgba(255,255,255,.06); box-shadow: inset 0 0 0 1px rgba(255,255,255,.02), 0 30px 60px rgba(0,0,0,.55); position:relative; overflow:hidden; padding: clamp(10px,2vw,18px)}
+    .board::before{content:""; position:absolute; inset:0; pointer-events:none; background: radial-gradient(140% 120% at 50% 30%, rgba(255,255,255,.06) 0%, rgba(255,255,255,0) 55%), radial-gradient(80% 140% at 10% 120%, rgba(0,0,0,.35) 0%, rgba(0,0,0,0) 60%);}
+    .board::after{content:""; position:absolute; inset:-20% -10% auto -10%; height:45%; transform:skewY(-6deg); background: linear-gradient(180deg, rgba(255,255,255,.15), rgba(255,255,255,0)); opacity:.35; pointer-events:none;}
+    #led { width:100%; height:100%; display:block; will-change:transform; transform:translateZ(0); shape-rendering:optimizeSpeed; }
+    .seg { fill: rgba(255,255,255,0.08); stroke: rgba(255,255,255,0.12); stroke-width:5; stroke-linecap:round; stroke-linejoin:round; }
+    .on  { fill: var(--led); stroke: var(--led); stroke-width:5; stroke-linecap:round; stroke-linejoin:round; }
+    .dot { fill: var(--led); }
+    .digitHalo { opacity:.22; }
+    .display.success { --led: var(--ok); --glow: rgba(43,217,121,.36); animation:bounceGlow .8s ease-in-out infinite alternate; }
+    @keyframes bounceGlow{0%{transform:translateY(0) scale(1)}50%{transform:translateY(-6px) scale(1.02)}100%{transform:translateY(0) scale(1)}}
+    .indicator{color:var(--muted); display:flex; align-items:center; gap:10px; font-size:clamp(14px,2.4vw,18px)}
+    .dotStat{inline-size:12px; block-size:12px; border-radius:50%; background:#ff5a5a}
+    .dotStat.running{background:var(--ok); box-shadow:0 0 0 0 rgba(43,217,121,.6); animation:pulse 1.4s ease-out infinite}
+    @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(43,217,121,.6)}70%{box-shadow:0 0 0 16px rgba(43,217,121,0)}100%{box-shadow:0 0 0 0 rgba(43,217,121,0)}}
+    .bigbtn{appearance:none; border:0; cursor:pointer; position:relative; width:min(220px,28vw); height:min(220px,28vw); border-radius:50%; background: radial-gradient(circle at 30% 25%, #8affbf, #2bd979 55%, #178a57 100%); box-shadow: 0 22px 36px rgba(0,0,0,.45), inset 0 6px 10px rgba(255,255,255,.14), inset 0 -14px 22px rgba(0,0,0,.45); transition: transform .06s ease, filter .2s ease, box-shadow .12s ease}
+    .bigbtn::before{content:""; position:absolute; inset:-10px; border-radius:50%; background: linear-gradient(180deg, #3b425a, #0f1221); box-shadow: inset 0 2px 6px rgba(255,255,255,.06), 0 20px 28px rgba(0,0,0,.45); z-index:-1}
+    .bigbtn::after{content:""; position:absolute; left:12%; right:12%; top:10%; height:40%; border-radius:50%/60%; background: linear-gradient(180deg, rgba(255,255,255,.28), rgba(255,255,255,0)); pointer-events:none; mix-blend-mode:screen;}
+    .bigbtn:hover{filter:none !important} .bigbtn:active{transform:translateY(2px) scale(.99)}
+    .bigbtn.running{transform:translateY(2px); box-shadow: 0 16px 28px rgba(0,0,0,.5), inset 0 4px 8px rgba(255,255,255,.12), inset 0 -10px 18px rgba(0,0,0,.5); background: radial-gradient(circle at 30% 25%, #ff9a9a, #ff3b3b 55%, #9c1414 100%) !important;}
+    .bigbtn.stopped{background: radial-gradient(circle at 30% 25%, #ffd084, #ff9800 55%, #b55a00 100%) !important;}
+    .icon{position:absolute; inset:0; display:grid; place-items:center}
+    .icon.stop{display:none}
+    .icon.reset{display:none}
+    .bigbtn.running .icon.play{display:none}
+    .bigbtn.running .icon.stop{display:grid}
+    .bigbtn.stopped .icon.play{display:none}
+    .bigbtn.stopped .icon.stop{display:none}
+    .bigbtn.stopped .icon.reset{display:grid}
+    .emojiStart,.emojiStop,.emojiReset{font-size:clamp(44px,9vw,84px); line-height:1; display:block; filter:none; padding:0; border-radius:0; background:none !important; text-shadow:0 2px 0 rgba(0,0,0,.2);} 
+    @font-face{font-family:'DrukCondSuper'; src:url('DrukCond-Super-Trial.otf') format('opentype'); font-weight:900; font-style:normal; font-display:swap;}
+    @keyframes digitBounce{0%{transform:translateY(0) scale(1)}30%{transform:translateY(-8px) scale(1.04)}60%{transform:translateY(0) scale(1)}100%{transform:translateY(-4px) scale(1.02)}}
+    #led.bounceDigits{will-change:transform; animation:digitBounce .9s cubic-bezier(.2,.8,.2,1) infinite; transform-origin:50% 55%;}
+    #fx{position:absolute; inset:0; pointer-events:none;}
+  </style>
+</head>
+<body>
+  <div class="card" role="region" aria-label="Timer">
+    <div class="titlebar"><h1>TalentIn Olympics</h1></div>
+    <div class="board">
+      <svg id="led" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></svg>
+      <canvas id="fx"></canvas>
+      <div id="display" class="display" aria-live="polite" aria-atomic="true" hidden>00.0</div>
+    </div>
+    <div class="indicator" aria-live="polite" aria-atomic="true">
+      <span class="dotStat" id="statusDot" aria-hidden="true"></span>
+      <span id="statusText">Ready</span>
+    </div>
+    <button id="toggleBtn" class="bigbtn" aria-pressed="false" title="Start/Stop/Reset (Space)">
+      <span class="icon play" aria-hidden="true"><span class="emojiStart" role="img" aria-label="start">🚀</span></span>
+      <span class="icon stop" aria-hidden="true"><span class="emojiStop" role="img" aria-label="finish">🏁</span></span>
+      <span class="icon reset" aria-hidden="true"><span class="emojiReset" role="img" aria-label="reset">🔁</span></span>
+    </button>
+  </div>
+
+  <script>
+    (function(){
+      const led = document.getElementById('led');
+      const displayEl = document.getElementById('display');
+      const toggleBtn = document.getElementById('toggleBtn');
+      const statusDot = document.getElementById('statusDot');
+      const statusText = document.getElementById('statusText');
+      const board = document.querySelector('.board');
+      const fx = document.getElementById('fx');
+      let fxCtx = fx ? fx.getContext('2d') : null;
+      let rafId = null; let running = false; let startTs = 0; let elapsed = 0;
+      let fireworks = []; let fxRaf = null; let fxEndTime = 0;
+      function format(ms, decimals = 2){ const totalSeconds = Math.floor(ms/1000); const msec = Math.floor(ms % 1000); const secStr = String(totalSeconds).padStart(2,'0'); let frac; if (decimals === 3) { frac = String(msec).padStart(3,'0'); } else { frac = String(Math.floor(msec/10)).padStart(2,'0'); } return `${secStr}.${frac}`; }
+      const W=90, H=160, T=20, B=10, GAP=16, DOT_ADV=26, DOT_R=T*0.5;
+      const onMap={ '0':['a','b','c','d','e','f'], '1':['b','c'], '2':['a','b','g','e','d'], '3':['a','b','g','c','d'], '4':['f','g','b','c'], '5':['a','f','g','c','d'], '6':['a','f','g','c','d','e'], '7':['a','b','c'], '8':['a','b','c','d','e','f','g'], '9':['a','b','c','d','f','g'] };
+      function buildDigitGroup(){ const g = document.createElementNS('http://www.w3.org/2000/svg','g'); const halo = document.createElementNS('http://www.w3.org/2000/svg','rect'); halo.setAttribute('x', -GAP*0.2); halo.setAttribute('y', 0); halo.setAttribute('width', W+GAP*0.4); halo.setAttribute('height', H); halo.setAttribute('rx', 16); halo.setAttribute('ry', 16); halo.setAttribute('fill', 'url(#haloGrad)'); halo.setAttribute('opacity','0.60'); halo.setAttribute('class','digitHalo'); g.appendChild(halo); ['a','b','c','d','e','f','g'].forEach(k=>{ const p = document.createElementNS('http://www.w3.org/2000/svg','path'); p.setAttribute('data-seg', k); p.setAttribute('d', segPath(k)); p.setAttribute('class','seg'); g.appendChild(p); }); return g; }
+      function buildDotGroup(){ const g = document.createElementNS('http://www.w3.org/2000/svg','g'); const halo = document.createElementNS('http://www.w3.org/2000/svg','circle'); halo.setAttribute('cx', DOT_ADV/2); halo.setAttribute('cy', H - T*0.8); halo.setAttribute('r', DOT_R*1.25); halo.setAttribute('fill','url(#haloGrad)'); halo.setAttribute('opacity','0.60'); g.appendChild(halo); const c = document.createElementNS('http://www.w3.org/2000/svg','circle'); c.setAttribute('cx', DOT_ADV/2); c.setAttribute('cy', H - T*0.8); c.setAttribute('r', DOT_R); c.setAttribute('class','dot on'); g.appendChild(c); return g; }
+      function segPath(key){ const t=T, b=B, w=W, h=H; switch(key){ case 'a': return `M ${b} ${t/2} L ${w-b} ${t/2} L ${w-b-t/2} ${t+b/2} L ${b+t/2} ${t+b/2} Z`; case 'd': return `M ${b} ${h-t/2} L ${w-b} ${h-t/2} L ${w-b-t/2} ${h-t-b/2} L ${b+t/2} ${h-t-b/2} Z`; case 'g': const y=h/2; return `M ${b} ${y} L ${b+t/2} ${y-t/2} L ${w-b-t/2} ${y-t/2} L ${w-b} ${y} L ${w-b-t/2} ${y+t/2} L ${b+t/2} ${y+t/2} Z`; case 'f': return `M ${t/2} ${b} L ${t+b/2} ${b+t/2} L ${t+b/2} ${h/2-t/2} L ${t/2} ${h/2} Z`; case 'e': return `M ${t/2} ${h/2} L ${t+b/2} ${h/2+t/2} L ${t+b/2} ${h-b-t/2} L ${t/2} ${h-b} Z`; case 'b': return `M ${w-t/2} ${b} L ${w-t-b/2} ${b+t/2} L ${w-t-b/2} ${h/2-t/2} L ${w-t/2} ${h/2} Z`; case 'c': return `M ${w-t/2} ${h/2} L ${w-t-b/2} ${h/2+t/2} L ${w-t-b/2} ${h-b-t/2} L ${w-t/2} ${h-b} Z`; default: return ''; } }
+      const MAX_SLOTS = 6; let wrapG = null; const TOTAL_WIDTH = (W+GAP)*5 + DOT_ADV; const slots=[];
+      function mount(){ const defs = document.createElementNS('http://www.w3.org/2000/svg','defs'); const grad = document.createElementNS('http://www.w3.org/2000/svg','radialGradient'); grad.setAttribute('id','haloGrad'); grad.setAttribute('cx','50%'); grad.setAttribute('cy','50%'); grad.setAttribute('r','80%'); const s1=document.createElementNS('http://www.w3.org/2000/svg','stop'); s1.setAttribute('offset','0%'); s1.setAttribute('stop-color','var(--glow)'); s1.setAttribute('stop-opacity','1'); const s2=document.createElementNS('http://www.w3.org/2000/svg','stop'); s2.setAttribute('offset','100%'); s2.setAttribute('stop-color','transparent'); s2.setAttribute('stop-opacity','0'); grad.appendChild(s1); grad.appendChild(s2); defs.appendChild(grad); led.appendChild(defs); led.setAttribute('viewBox', `0 0 ${TOTAL_WIDTH} ${H}`); wrapG = document.createElementNS('http://www.w3.org/2000/svg','g'); led.appendChild(wrapG); let x=0; for(let i=0;i<MAX_SLOTS;i++){ const isDot = (i===2); const g = isDot ? buildDotGroup() : buildDigitGroup(); g.setAttribute('transform',`translate(${x},0)`); wrapG.appendChild(g); slots.push({g, type:isDot?'dot':'digit', segEls: isDot? [] : Array.from(g.querySelectorAll('[data-seg]'))}); x += isDot ? DOT_ADV : (W+GAP); } }
+      function setCharInSlot(i, ch){ const s = slots[i]; if(!s) return; if(s.type==='dot'){ s.g.style.display=''; return; } const on = onMap[ch] || []; s.segEls.forEach(p=>{ const k=p.getAttribute('data-seg'); if(on.includes(k)) p.setAttribute('class','seg on'); else p.setAttribute('class','seg'); }); s.g.style.display=''; }
+      function renderString(str){ setCharInSlot(0, str[0]); setCharInSlot(1, str[1]); slots[2].g.style.display=''; const decCount = Math.max(0, str.length - 3); if(decCount >= 1) setCharInSlot(3, str[3]); else slots[3].g.style.display='none'; if(decCount >= 2) setCharInSlot(4, str[4]); else slots[4].g.style.display='none'; if(decCount >= 3) setCharInSlot(5, str[5]); else slots[5].g.style.display='none'; const used = (W+GAP)*(2 + decCount) + DOT_ADV; const offset = Math.max(0, (TOTAL_WIDTH - used) / 2); if(wrapG) wrapG.setAttribute('transform', `translate(${offset},0)`); }
+      function syncSize(){ led.style.width = '96%'; led.style.height = '90%'; if(fx){ const r = window.devicePixelRatio || 1; const rect = board.getBoundingClientRect(); fx.width = Math.max(1, Math.round(rect.width * r)); fx.height = Math.max(1, Math.round(rect.height * r)); fx.style.width = rect.width + 'px'; fx.style.height = rect.height + 'px'; fxCtx = fx.getContext('2d'); fxCtx.setTransform(r,0,0,r,0,0); } }
+      function updateButtonVisual(){ toggleBtn.classList.toggle('stopped', !running && elapsed > 0); }
+      function setSuccess(on){ board.classList.toggle('success', !!on); if(on){ led.parentElement.classList.add('display','success'); led.classList.add('bounceDigits'); launchFireworks(); } else { led.parentElement.classList.remove('display','success'); led.classList.remove('bounceDigits'); } }
+      function launchFireworks(){ if(!fxCtx) return; const ratio = window.devicePixelRatio||1; const w = fx.width/ratio, h = fx.height/ratio; const colors = ['#f1ff8a','#7c9cff','#3de0c1','#ff6b6b']; const centers = [ [w*0.35,h*0.45], [w*0.5,h*0.35], [w*0.65,h*0.5] ]; fireworks.length = 0; centers.forEach((pt,i)=> spawnBurst(pt[0], pt[1], colors[i%colors.length])); fxEndTime = performance.now() + 1600; if(fxRaf) cancelAnimationFrame(fxRaf); fxRaf = requestAnimationFrame(fxLoop); }
+      function spawnBurst(x,y,color){ const N = 90; for(let i=0;i<N;i++){ const ang = (i/N)*Math.PI*2 + Math.random()*0.1; const spd = 2 + Math.random()*3; fireworks.push({x,y,vx:Math.cos(ang)*spd, vy:Math.sin(ang)*spd, life:70+Math.random()*20, color, alpha:1}); } }
+      function fxLoop(){ if(!fxCtx){return} fxCtx.clearRect(0,0,fx.width,fx.height); fxCtx.save(); for(let i=fireworks.length-1;i>=0;i--){ const p = fireworks[i]; p.x += p.vx; p.y += p.vy; p.vy += 0.03; p.life -= 1; p.alpha = Math.max(0, p.life/90); fxCtx.globalAlpha = p.alpha; fxCtx.fillStyle = p.color; fxCtx.beginPath(); fxCtx.arc(p.x, p.y, 2, 0, Math.PI*2); fxCtx.fill(); if(p.life<=0) fireworks.splice(i,1); } fxCtx.restore(); if(performance.now() < fxEndTime && fireworks.length){ fxRaf = requestAnimationFrame(fxLoop); } else { fireworks.length = 0; fxCtx.clearRect(0,0,fx.width,fx.height); fxRaf = null; } }
+      function render(){ const now = performance.now(); const current = running ? (now - startTs) : elapsed; const str = format(current, running ? 3 : 2); displayEl.textContent = str; renderString(str); if(running) rafId = requestAnimationFrame(render); }
+      function setRunningState(isRunning){ running = isRunning; toggleBtn.classList.toggle('running', running); toggleBtn.setAttribute('aria-pressed', String(running)); statusText.textContent = running ? 'Running' : 'Ready'; statusDot.classList.toggle('running', running); if(running){ setSuccess(false); } updateButtonVisual(); }
+      function start(){ if(running) return; startTs = performance.now() - elapsed; setRunningState(true); cancelAnimationFrame(rafId); render(); rafId = requestAnimationFrame(render); }
+      function stop(){ if(!running) return; cancelAnimationFrame(rafId); rafId = null; elapsed = performance.now() - startTs; setRunningState(false); render(); const shown = format(elapsed, 2); setSuccess(shown === '10.00'); }
+      function reset(){ cancelAnimationFrame(rafId); rafId = null; elapsed = 0; startTs = performance.now(); setSuccess(false); setRunningState(false); render(); renderString('00.00'); }
+      function toggle(){ running ? stop() : start(); }
+      function cycle(){ if(running){ stop(); } else if (elapsed > 0){ reset(); } else { start(); } }
+      toggleBtn.addEventListener('click', e=>{ e.preventDefault(); e.stopPropagation(); cycle(); });
+      window.addEventListener('keydown', e=>{ if((e.code==='Space' || e.key===' ') && !e.repeat){ e.preventDefault(); cycle(); } else if((e.key==='r' || e.key==='R') && !e.repeat){ e.preventDefault(); reset(); } }, {passive:false});
+      window.addEventListener('mousedown', (e)=>{ if (toggleBtn.contains(e.target)) return; if (e.button === 0 || e.button === 2) { e.preventDefault(); cycle(); } }, true);
+      window.addEventListener('contextmenu', (e)=>{ e.preventDefault(); });
+      window.addEventListener('resize', syncSize);
+      (function init(){ mount(); syncSize(); renderString('00.00'); updateButtonVisual(); })();
+      try{ console.assert(format(0,2)==='00.00'); console.assert(format(999,3)==='00.999'); console.assert(format(9999,3)==='09.999'); console.assert(format(10000,2)==='10.00'); console.assert(format(10999,2)==='10.99'); console.assert(format(1,3)==='00.001'); console.assert(format(59000,2)==='59.00'); }catch(e){}
+    })();
+  </script>
+  <script>
+    if('serviceWorker' in navigator){ window.addEventListener('load', ()=>{ navigator.serviceWorker.register('./sw.js'); }); }
+  </script>
+</body>
+</html>
+```
